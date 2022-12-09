@@ -1,0 +1,6 @@
+version: "Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)"
+options: "13ba61cf0e70c8e51d7e80ef813ce83af109b620437554df5c7b8ee42b4d8764"
+build_start_time: [1670421065, 804368972]
+build_end_time: [1670421065, 827852010]
+inputs:
+  "/Users/ananoromashvili/Documents/parseAPI/macos/Pods/ReachabilitySwift/Sources/Reachability.swift": !private [1670421061, 11794567]
