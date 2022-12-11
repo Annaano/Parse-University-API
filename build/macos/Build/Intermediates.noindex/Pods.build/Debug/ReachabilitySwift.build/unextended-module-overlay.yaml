@@ -4,11 +4,11 @@
   'case-sensitive': 'false',
   'roots': [{
     'type': 'directory',
-    'name': "/Users/ananoromashvili/Documents/parseAPI/build/macos/Build/Products/Debug/ReachabilitySwift/Reachability.framework/Modules"
+    'name': "/Users/ananoromashvili/Desktop/Parse-University-API/build/macos/Build/Products/Debug/ReachabilitySwift/Reachability.framework/Modules"
     'contents': [{
       'type': 'file',
       'name': "module.modulemap",
-      'external-contents': "/Users/ananoromashvili/Documents/parseAPI/build/macos/Build/Intermediates.noindex/Pods.build/Debug/ReachabilitySwift.build/unextended-module.modulemap",
+      'external-contents': "/Users/ananoromashvili/Desktop/Parse-University-API/build/macos/Build/Intermediates.noindex/Pods.build/Debug/ReachabilitySwift.build/unextended-module.modulemap",
     }]
   }]
 }

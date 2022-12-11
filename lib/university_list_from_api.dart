@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher_string.dart';
 import 'list_data_model.dart';
 
 class UniversityListFromAPI extends StatefulWidget {
@@ -41,7 +42,8 @@ class _UniversityListFromAPIState extends State<UniversityListFromAPI> {
       var serverURL = "http://universities.hipolabs.com/search";
       var token = widget.countryName;
       var url = '$serverURL?country=$token';
-      var response = await http.get(Uri.parse(url));
+      var response =
+          await http.get(Uri.parse(url)).timeout(const Duration(seconds: 5));
       if (response.statusCode == 200) {
         var items = json.decode(response.body);
         internetConnection = true;
@@ -66,9 +68,23 @@ class _UniversityListFromAPIState extends State<UniversityListFromAPI> {
 
   showDialogBox() => showCupertinoDialog<String>(
         context: context,
-        builder: (BuildContext context) => const CupertinoAlertDialog(
-          title: Text('No internet connection'),
-          content: Text('Please check your internet connection and try again'),
+        builder: (BuildContext context) => CupertinoAlertDialog(
+          title: const Text('No Internet Connection'),
+          content:
+              const Text('Turn on celluar data or use Wi-Fi to access data.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                // Navigator.of(context).push(
+                //   MaterialPageRoute(
+                //     builder: (context) => const CountryList(),
+                //   ),
+                // );
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              },
+              child: const Text('OK'),
+            ),
+          ],
         ),
       );
   @override
@@ -88,7 +104,6 @@ class _UniversityListFromAPIState extends State<UniversityListFromAPI> {
   Widget? getBody() {
     if (internetConnection == false && !isLoading) {
       return null;
-      //loadingFinished
     } else {
       if (universities.contains(null) || isLoading) {
         return const Center(child: CircularProgressIndicator());
@@ -104,29 +119,46 @@ class _UniversityListFromAPIState extends State<UniversityListFromAPI> {
   Widget getUniversitiesListPage(index) {
     var uniName = index['name'];
     var uniCountry = index['country'];
+    var webPage = index['web_pages'][0];
     return Card(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+        elevation: 8.0,
+        margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
         child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: ListTile(
-                title: Row(children: <Widget>[
-              const SizedBox(
-                width: 20,
-              ),
-              Flexible(
-                  child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Text(uniName.toString(),
                       style: const TextStyle(fontSize: 17),
-                      textAlign: TextAlign.left),
+                      textAlign: TextAlign.center),
                   const SizedBox(
                     height: 10,
                   ),
-                  Text(uniCountry.toString(),
-                      style: const TextStyle(fontSize: 17, color: Colors.grey),
-                      textAlign: TextAlign.left)
+                  GestureDetector(
+                    child: (Text(uniCountry.toString(),
+                        style:
+                            const TextStyle(fontSize: 12, color: Colors.grey),
+                        textAlign: TextAlign.left)),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      var url = webPage;
+                      if (await canLaunchUrlString(url)) {
+                        await launchUrlString(url);
+                      } else {
+                        throw 'Could not launch $url';
+                      }
+                    },
+                    child: const Text(
+                      'READ MORE ',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                  ),
                 ],
-              )),
-            ]))));
+              ),
+            )));
   }
 }

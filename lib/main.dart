@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'list_data_model.dart';
 import 'university_list_from_api.dart';
 
@@ -21,15 +20,25 @@ class _CountryListState extends State<CountryList> {
     'United States',
     'Germany',
     'France',
-    'Italy'
+    'Italy',
+    'United Kingdom',
+    'Australia',
+    'Ukraine',
+    'Netherlands',
+    'Canada'
   ];
 
   static List<String> flagsURL = [
-    'https://flagsworld.org/img/cflags/georgia-flag.png',
-    'https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Flag_of_the_United_States.svg/1280px-Flag_of_the_United_States.svg.png',
-    'https://upload.wikimedia.org/wikipedia/en/thumb/b/ba/Flag_of_Germany.svg/1200px-Flag_of_Germany.svg.png',
-    'https://upload.wikimedia.org/wikipedia/en/thumb/c/c3/Flag_of_France.svg/1920px-Flag_of_France.svg.png',
-    'https://upload.wikimedia.org/wikipedia/en/thumb/0/03/Flag_of_Italy.svg/1200px-Flag_of_Italy.svg.png'
+    'https://www.countries-ofthe-world.com/flags-normal/flag-of-Georgia.png',
+    'https://www.countries-ofthe-world.com/flags-normal/flag-of-United-States-of-America.png',
+    'https://www.countries-ofthe-world.com/flags-normal/flag-of-Germany.png',
+    'https://www.countries-ofthe-world.com/flags-normal/flag-of-France.png',
+    'https://www.countries-ofthe-world.com/flags-normal/flag-of-Italy.png',
+    'https://www.countries-ofthe-world.com/flags-normal/flag-of-United-Kingdom.png',
+    'https://www.countries-ofthe-world.com/flags-normal/flag-of-Australia.png',
+    'https://www.countries-ofthe-world.com/flags-normal/flag-of-Ukraine.png',
+    'https://www.countries-ofthe-world.com/flags-normal/flag-of-Netherlands.png',
+    'https://www.countries-ofthe-world.com/flags-normal/flag-of-Canada.png'
   ];
 
   final List<ListDataModel> countryListData = List.generate(
@@ -39,37 +48,50 @@ class _CountryListState extends State<CountryList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('COUNTRIES'),
-        centerTitle: true,
-      ),
-      body: ListView.builder(
-        itemCount: countryListData.length,
-        itemBuilder: (context, index) {
-          return Card(
-            child: ListTile(
-              leading: SizedBox(
-                width: 50,
-                height: 50,
-                child: Image.network(countryListData[index].imageUrl),
+        appBar: AppBar(
+          title: const Text('COUNTRIES'),
+          centerTitle: true,
+        ),
+        body: ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: countryListData.length,
+          itemBuilder: (context, index) {
+            return Card(
+              elevation: 8.0,
+              margin:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25.0)),
+              child: ListTile(
+                contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 25.0, vertical: 15.0),
+                leading: SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: FadeInImage.assetNetwork(
+                      placeholder: 'lib/assets/study.png',
+                      image: countryListData[index].imageUrl,
+                    )),
+                title: Column(children: [
+                  Text(
+                    countryListData[index].names.toUpperCase(),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                ]),
+                trailing: const Icon(Icons.arrow_forward_ios,
+                    color: Colors.blueAccent, size: 20.0),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => UniversityListFromAPI(
+                            countryName: countryNamesList[index],
+                            dataList: countryListData,
+                          )));
+                },
               ),
-              title: Column(children: [
-                Text(
-                  countryListData[index].names,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ]),
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => UniversityListFromAPI(
-                          countryName: countryNamesList[index],
-                          dataList: countryListData,
-                        )));
-              },
-            ),
-          );
-        },
-      ),
-    );
+            );
+          },
+        ));
   }
 }
