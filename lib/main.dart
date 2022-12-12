@@ -70,6 +70,9 @@ class _CountryListState extends State<CountryList> {
                     width: 50,
                     height: 50,
                     child: FadeInImage.assetNetwork(
+                      imageErrorBuilder: (context, error, stackTrace) {
+                        return Image.asset('lib/assets/study.png');
+                      },
                       placeholder: 'lib/assets/study.png',
                       image: countryListData[index].imageUrl,
                     )),
