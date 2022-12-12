@@ -43,7 +43,7 @@ class _UniversityListFromAPIState extends State<UniversityListFromAPI> {
       var token = widget.countryName;
       var url = '$serverURL?country=$token';
       var response =
-          await http.get(Uri.parse(url)).timeout(const Duration(seconds: 5));
+          await http.get(Uri.parse(url)).timeout(const Duration(seconds: 3));
       if (response.statusCode == 200) {
         var items = json.decode(response.body);
         internetConnection = true;
@@ -75,11 +75,6 @@ class _UniversityListFromAPIState extends State<UniversityListFromAPI> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (context) => const CountryList(),
-                //   ),
-                // );
                 Navigator.of(context).popUntil((route) => route.isFirst);
               },
               child: const Text('OK'),
@@ -104,6 +99,7 @@ class _UniversityListFromAPIState extends State<UniversityListFromAPI> {
   Widget? getBody() {
     if (internetConnection == false && !isLoading) {
       return null;
+      // showDialogBox();
     } else {
       if (universities.contains(null) || isLoading) {
         return const Center(child: CircularProgressIndicator());
